@@ -1,0 +1,15 @@
+# DOCKER
+.docker
+
+# PYTHON
+__pycache__/
+
+# IDE
+.idea
+
+# Environments
+.venv
+venv/
+
+# OS
+.DS_STORE
