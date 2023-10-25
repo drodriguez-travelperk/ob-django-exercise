@@ -1,7 +1,12 @@
-from recipe.schemas.recipe_schema import RecipeListResponseSchema
+# From apps
+from typing import List
+
+from recipe.dto.recipe import RecipeDto
+from recipe.api.query.get_recipes import QueryRecipeAPI
 
 
-class RecipeAPI():
-    def get_recipes(self) -> RecipeListResponseSchema:
+class RecipeAPI:
+    @staticmethod
+    def get_recipes() -> List[RecipeDto]:
         """Get all recipes"""
-        return
+        return QueryRecipeAPI.get_recipes()

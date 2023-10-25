@@ -1,18 +1,20 @@
-"""
-Views for Recipe APIs
-"""
-from rest_framework import viewsets
+# Dependencies
+from rest_framework.response import Response
+from rest_framework.request import Request
+from rest_framework.viewsets import ViewSet
+from rest_framework import status
 
-from core.models import Recipe
-from recipe import serializers
+# From apps
+from recipe.api.recipe_api import RecipeAPI
 
 
-class RecipeViewSet(viewsets.ModelViewSet):
+class RecipeViewSet(ViewSet):
     """View for manage recipe apis"""
 
-    serializer_class = serializers.RecipeSerializer
-    queryset = Recipe.objects.all()
+    @staticmethod
+    def list(request: Request) -> Response:
+        """Get and return the list of recipes"""
+        res = RecipeAPI.get_recipes()
+        recipes = [recipe_dto.dict() for recipe_dto in res]
 
-    def get_queryset(self):
-        """Retrieve list of recipes"""
-        return self.queryset.order_by("-name")
+        return Response(data=recipes, status=status.HTTP_200_OK)
