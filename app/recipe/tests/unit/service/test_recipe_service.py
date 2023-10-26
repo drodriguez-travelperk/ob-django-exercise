@@ -32,3 +32,13 @@ class TestRecipeService(TestCase):
 
         mock_repository.assert_called_once()
         assert res == dtos
+
+    @mock.patch("recipe.repository.recipe_repository.RecipeRepository.get_by_id")
+    def test_get_recipe_from_db(self, mock_repository):
+        dto = create_dtos()[0]
+        mock_repository.return_value = dto
+
+        res = RecipeService.get_recipe_by_id(1)
+
+        mock_repository.assert_called_once()
+        assert res == dto

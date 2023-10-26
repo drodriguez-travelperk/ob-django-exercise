@@ -21,3 +21,6 @@ class RecipeDto(FrozenModel):
         if isinstance(v, BaseManager):
             return list(v.all())
         return v
+
+    def to_json(self):
+        return self.model_dump()

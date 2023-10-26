@@ -10,3 +10,7 @@ class RecipeService:
     @staticmethod
     def get_recipes() -> List[RecipeDto]:
         return RecipeRepository.get_all()
+
+    @staticmethod
+    def get_recipe_by_id(id: int) -> RecipeDto:
+        return RecipeRepository.get_by_id(id)
