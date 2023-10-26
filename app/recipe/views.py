@@ -5,7 +5,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework import status
 
 # From apps
-from recipe.api.recipe_api import RecipeAPI
+from recipe.service.recipe_service import RecipeService
 
 
 class RecipeViewSet(ViewSet):
@@ -14,7 +14,7 @@ class RecipeViewSet(ViewSet):
     @staticmethod
     def list(request: Request) -> Response:
         """Get and return the list of recipes"""
-        res = RecipeAPI.get_recipes()
-        recipes = [recipe_dto.dict() for recipe_dto in res]
+        res = RecipeService.get_recipes()
+        recipes = [recipe_dto.model_dump() for recipe_dto in res]
 
         return Response(data=recipes, status=status.HTTP_200_OK)
