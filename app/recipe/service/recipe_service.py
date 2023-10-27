@@ -19,3 +19,7 @@ class RecipeService:
     @staticmethod
     def get_recipe_by_id(recipe_id: int) -> Optional[RecipeDto]:
         return RecipeRepository.get_by_id(recipe_id)
+
+    @staticmethod
+    def delete_recipe(recipe_id: int) -> None:
+        return RecipeRepository.delete(recipe_id)

@@ -5,6 +5,11 @@ from unittest import mock, TestCase
 from recipe.service.recipe_service import RecipeService
 from recipe.dto.recipe import RecipeDto
 
+# Dependencies
+from django.core.exceptions import ObjectDoesNotExist
+
+# Apps
+from core.models import Recipe, Ingredient
 
 def create_dtos():
     return [
@@ -18,7 +23,7 @@ def create_dtos():
                 {"id": 3, "name": "steak"}
             ]
         ),
-        RecipeDto(id=2, name="Asado", description="Best dish in the world", ingredients=[]),
+        RecipeDto(id=2, name="Asado", description="There are no words to describe it. You have to try it", ingredients=[]),
     ]
 
 
@@ -61,3 +66,16 @@ class TestRecipeService(TestCase):
         }
         RecipeService.create(**payload)
         mock_repository.assert_called_once_with(**payload)
+
+    def test_delete_recipe_success(self):
+        recipe = Recipe.objects.create(name="Pizza", description="From Italy")
+        Ingredient.objects.create(recipe=recipe, name="Tomato")
+
+        RecipeService.delete_recipe(recipe.id)
+
+        recipe_on_db = Recipe.objects.filter(pk=recipe.id).exists()
+        self.assertFalse(recipe_on_db)
+
+    def test_delete_recipe_raise_not_exist(self):
+        with self.assertRaises(ObjectDoesNotExist):
+            RecipeService.delete_recipe(123)

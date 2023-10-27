@@ -1,5 +1,6 @@
 # Dependencies
 from typing import List, Optional
+from django.core.exceptions import ObjectDoesNotExist
 
 # From apps
 from recipe.dto.recipe import RecipeDto
@@ -24,8 +25,19 @@ class RecipeRepository:
 
     @staticmethod
     def get_by_id(recipe_id: int) -> Optional[RecipeDto]:
-        recipe = Recipe.objects.prefetch_related("ingredients").get(pk=recipe_id)
-        if not recipe:
-            return None
-        recipe_dto = RecipeDto.model_validate(recipe)
-        return recipe_dto
+        try:
+            recipe = Recipe.objects.prefetch_related("ingredients").get(pk=recipe_id)
+            recipe_dto = RecipeDto.model_validate(recipe)
+            return recipe_dto
+        except Recipe.DoesNotExist:
+            raise ObjectDoesNotExist
+
+    @staticmethod
+    def delete(recipe_id: int) -> None:
+        try:
+            recipe = Recipe.objects.get(pk=recipe_id)
+            recipe.delete()
+        except Recipe.DoesNotExist:
+            raise ObjectDoesNotExist
+
+

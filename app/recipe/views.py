@@ -1,5 +1,6 @@
 # Dependencies
 import jsonref
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.viewsets import ViewSet
@@ -37,8 +38,17 @@ class RecipeViewSet(ViewSet):
 
     @staticmethod
     def retrieve(request: Request, pk=None) -> Response:
-        res = RecipeService.get_recipe_by_id(pk).to_json()
-        if not res:
+        try:
+            res = RecipeService.get_recipe_by_id(pk).to_json()
+            return Response(data=res, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)
-        return Response(data=res, status=status.HTTP_200_OK)
+
+    @staticmethod
+    def destroy(request: Request, pk=None) -> Response:
+        try:
+            RecipeService.delete_recipe(pk)
+            return Response(status=status.HTTP_202_ACCEPTED)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
