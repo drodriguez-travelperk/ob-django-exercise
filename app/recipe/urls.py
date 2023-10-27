@@ -13,4 +13,6 @@ router.register(prefix="", viewset=views.RecipeViewSet, basename="recipe")
 
 app_name = "recipe"
 
-urlpatterns = [path("", include(router.urls))]
+urlpatterns = [
+    path("", include(router.urls))
+]
