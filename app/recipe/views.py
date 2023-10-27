@@ -38,5 +38,7 @@ class RecipeViewSet(ViewSet):
     @staticmethod
     def retrieve(request: Request, pk=None) -> Response:
         res = RecipeService.get_recipe_by_id(pk).to_json()
+        if not res:
+            return Response(status.HTTP_404_NOT_FOUND)
         return Response(data=res, status=status.HTTP_200_OK)
 
