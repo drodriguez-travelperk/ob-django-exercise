@@ -1,5 +1,5 @@
 # Dependencies
-from typing import List
+from typing import List, Optional
 
 # From apps
 from recipe.schema.create_recipe_schema import CreateRecipeRequestSchema
@@ -17,5 +17,5 @@ class RecipeService:
         return RecipeRepository.get_all()
 
     @staticmethod
-    def get_recipe_by_id(id: int) -> RecipeDto:
-        return RecipeRepository.get_by_id(id)
+    def get_recipe_by_id(recipe_id: int) -> Optional[RecipeDto]:
+        return RecipeRepository.get_by_id(recipe_id)

@@ -31,7 +31,7 @@ class TestRecipeService(TestCase):
         res = RecipeService.get_recipes()
 
         mock_repository.assert_called_once()
-        assert res == dtos
+        self.assertEqual(res, dtos)
 
     @mock.patch("recipe.repository.recipe_repository.RecipeRepository.get_by_id")
     def test_get_recipe_from_db(self, mock_repository):
@@ -40,5 +40,24 @@ class TestRecipeService(TestCase):
 
         res = RecipeService.get_recipe_by_id(1)
 
-        mock_repository.assert_called_once()
-        assert res == dto
+        mock_repository.assert_called_once_with(1)
+        self.assertEqual(res, dto)
+
+    @mock.patch("recipe.repository.recipe_repository.RecipeRepository.get_by_id")
+    def test_get_recipe_from_db_not_found(self, mock_repository):
+        mock_repository.return_value = None
+
+        res = RecipeService.get_recipe_by_id(1)
+
+        mock_repository.assert_called_once_with(1)
+        self.assertIsNone(res)
+
+    @mock.patch("recipe.repository.recipe_repository.RecipeRepository.create")
+    def test_create_recipe(self, mock_repository):
+        payload = {
+            "name": "Milanesa",
+            "description": "Best dish in the world",
+            "ingredients": []
+        }
+        RecipeService.create(**payload)
+        mock_repository.assert_called_once_with(**payload)

@@ -1,5 +1,5 @@
 # Dependencies
-from typing import List
+from typing import List, Optional
 
 # From apps
 from recipe.dto.recipe import RecipeDto
@@ -23,7 +23,9 @@ class RecipeRepository:
         return [RecipeDto.model_validate(recipe) for recipe in recipes_with_ingredients]
 
     @staticmethod
-    def get_by_id(recipe_id: int) -> RecipeDto:
+    def get_by_id(recipe_id: int) -> Optional[RecipeDto]:
         recipe = Recipe.objects.prefetch_related("ingredients").get(pk=recipe_id)
+        if not recipe:
+            return None
         recipe_dto = RecipeDto.model_validate(recipe)
         return recipe_dto
