@@ -18,7 +18,7 @@ class RecipeViewSet(ViewSet):
     """View for manage recipe apis"""
     @staticmethod
     @swagger_auto_schema(
-        request_body=Schema(**jsonref.replace_refs(CreateRecipeRequestSchema.model_json_schema()))
+        request_body=Schema(**jsonref.replace_refs(CreateRecipeRequestSchema.model_json_schema(mode='serialization')))
     )
     def create(request: Request) -> Response:
         try:
@@ -31,7 +31,7 @@ class RecipeViewSet(ViewSet):
     @staticmethod
     def list(request: Request) -> Response:
         """Get and return the list of recipes"""
-        res = RecipeService.get_recipes()
+        res = RecipeService.get_all()
         recipes = [recipe_dto.to_json() for recipe_dto in res]
 
         return Response(data=recipes, status=status.HTTP_200_OK)
@@ -39,10 +39,10 @@ class RecipeViewSet(ViewSet):
     @staticmethod
     def retrieve(request: Request, pk=None) -> Response:
         try:
-            res = RecipeService.get_recipe_by_id(pk).to_json()
-            return Response(data=res, status=status.HTTP_200_OK)
+            res = RecipeService.get_by_id(pk)
+            return Response(data=res.to_json(), status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
-            return Response(status.HTTP_404_NOT_FOUND)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     @staticmethod
     def destroy(request: Request, pk=None) -> Response:

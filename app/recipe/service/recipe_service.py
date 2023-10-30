@@ -13,11 +13,11 @@ class RecipeService:
         return RecipeRepository.create(**payload)
 
     @staticmethod
-    def get_recipes() -> List[RecipeDto]:
+    def get_all() -> List[RecipeDto]:
         return RecipeRepository.get_all()
 
     @staticmethod
-    def get_recipe_by_id(recipe_id: int) -> Optional[RecipeDto]:
+    def get_by_id(recipe_id: int) -> Optional[RecipeDto]:
         return RecipeRepository.get_by_id(recipe_id)
 
     @staticmethod
